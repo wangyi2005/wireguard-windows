@@ -1,0 +1,34 @@
+name: Compile WireGuard for Windows
+
+on:
+  push:
+  workflow_dispatch:
+    
+jobs:
+  compile:
+    runs-on: windows-2022
+    steps:
+      - name: Checkout wireguard-windows repository
+        uses: actions/checkout@v4
+        with:
+          repository: wireguard/wireguard-windows
+
+      - name: Run build script
+        run: .\build
+
+      - name: Verify build success
+        run: |
+          if (!(Test-Path ./amd64/wireguard.exe)) {
+            throw "Build failed: amd64/wireguard.exe not found."
+          }
+          if (!(Test-Path ./x86/wireguard.exe)) {
+            throw "Build failed: x86/wireguard.exe not found."
+          }
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: wireguard-windows
+          path: |
+            ./amd64/wireguard.exe
+            ./x86/wireguard.exe
