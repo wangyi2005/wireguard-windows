@@ -11,7 +11,7 @@ jobs:
       - name: Checkout wireguard-windows repository
         uses: actions/checkout@v4
         with:
-          repository: wireguard/wireguard-windows
+          repository: wangyi2005/wireguard-windows
 
       - name: Run build script
         run: .\build
