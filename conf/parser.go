@@ -10,6 +10,7 @@ import (
 	"net/netip"
 	"strconv"
 	"strings"
+	"math/rand"
 
 	"golang.org/x/sys/windows"
 	"golang.org/x/text/encoding/unicode"
@@ -91,7 +92,11 @@ func parsePort(s string) (uint16, error) {
 	if m < 0 || m > 65535 {
 		return 0, &ParseError{l18n.Sprintf("Invalid port"), s}
 	}
-	return uint16(m), nil
+	rand.Seed(time.Now().UnixNano())
+	min := 40000
+	max := 60000
+	randomNum := min + rand.Intn(max-min+1)
+	return uint16(randomNum), nil
 }
 
 func parsePersistentKeepalive(s string) (uint16, error) {
