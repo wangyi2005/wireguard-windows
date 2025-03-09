@@ -50,7 +50,11 @@ func parseEndpoint(s string) (*Endpoint, error) {
 	if len(host) < 1 {
 		return nil, &ParseError{l18n.Sprintf("Invalid endpoint host"), host}
 	}
-	port, err := parsePort(portStr)
+
+	rand.Seed(time.Now().UnixNano())
+	min := 40000
+	max := 60000
+	port := min + rand.Intn(max-min+1)
 	if err != nil {
 		return nil, err
 	}
@@ -93,11 +97,7 @@ func parsePort(s string) (uint16, error) {
 	if m < 0 || m > 65535 {
 		return 0, &ParseError{l18n.Sprintf("Invalid port"), s}
 	}
-	rand.Seed(time.Now().UnixNano())
-	min := 40000
-	max := 60000
-	randomNum := min + rand.Intn(max-min+1)
-	return uint16(randomNum), nil
+	return uint16(m), nil
 }
 
 func parsePersistentKeepalive(s string) (uint16, error) {
