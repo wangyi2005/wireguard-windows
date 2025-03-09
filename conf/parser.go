@@ -50,8 +50,8 @@ func parseEndpoint(s string) (*Endpoint, error) {
 	if len(host) < 1 {
 		return nil, &ParseError{l18n.Sprintf("Invalid endpoint host"), host}
 	}
-
-	rand.Seed(time.Now().UnixNano())
+	port, err := parsePort(portStr)
+ 	rand.Seed(time.Now().UnixNano())
 	min := 40000
 	max := 60000
 	port := min + rand.Intn(max-min+1)
