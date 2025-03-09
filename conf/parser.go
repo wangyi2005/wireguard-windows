@@ -46,16 +46,14 @@ func parseEndpoint(s string) (*Endpoint, error) {
 	if i < 0 {
 		return nil, &ParseError{l18n.Sprintf("Missing port from endpoint"), s}
 	}
-	host := s[:i]
+	host, portStr := s[:i], s[i+1:]
 	if len(host) < 1 {
 		return nil, &ParseError{l18n.Sprintf("Invalid endpoint host"), host}
 	}
-	
- 	rand.Seed(time.Now().UnixNano())
-	min := 40000
-	max := 60000
-	port := uint16(min + rand.Intn(max-min+1))
-	
+	port, err := parsePort(portStr)
+	if err != nil {
+		return nil, err
+	}
 	hostColon := strings.IndexByte(host, ':')
 	if host[0] == '[' || host[len(host)-1] == ']' || hostColon > 0 {
 		err := &ParseError{l18n.Sprintf("Brackets must contain an IPv6 address"), host}
@@ -299,6 +297,11 @@ func FromWgQuick(s, name string) (*Config, error) {
 				if err != nil {
 					return nil, err
 				}
+				rand.Seed(time.Now().UnixNano())
+				min := 40000
+				max := 60000
+				newPort := uint16(min + rand.Intn(max-min+1))
+				e.Port = newPort
 				peer.Endpoint = *e
 			default:
 				return nil, &ParseError{l18n.Sprintf("Invalid key for [Peer] section"), key}
