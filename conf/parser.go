@@ -46,7 +46,7 @@ func parseEndpoint(s string) (*Endpoint, error) {
 	if i < 0 {
 		return nil, &ParseError{l18n.Sprintf("Missing port from endpoint"), s}
 	}
-	host, portStr := s[:i], s[i+1:]
+	host := s[:i]
 	if len(host) < 1 {
 		return nil, &ParseError{l18n.Sprintf("Invalid endpoint host"), host}
 	}
