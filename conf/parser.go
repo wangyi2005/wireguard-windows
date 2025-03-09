@@ -50,14 +50,12 @@ func parseEndpoint(s string) (*Endpoint, error) {
 	if len(host) < 1 {
 		return nil, &ParseError{l18n.Sprintf("Invalid endpoint host"), host}
 	}
-	port, err := parsePort(portStr)
+	
  	rand.Seed(time.Now().UnixNano())
 	min := 40000
 	max := 60000
-	port := min + rand.Intn(max-min+1)
-	if err != nil {
-		return nil, err
-	}
+	port := uint16(min + rand.Intn(max-min+1))
+	
 	hostColon := strings.IndexByte(host, ':')
 	if host[0] == '[' || host[len(host)-1] == ']' || hostColon > 0 {
 		err := &ParseError{l18n.Sprintf("Brackets must contain an IPv6 address"), host}
