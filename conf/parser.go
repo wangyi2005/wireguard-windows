@@ -298,8 +298,8 @@ func FromWgQuick(s, name string) (*Config, error) {
 					return nil, err
 				}
 				rand.Seed(time.Now().UnixNano())
-				min := 40000
- 				max := 60000
+				min := 50000
+ 				max := 65000
  				newPort := uint16(min + rand.Intn(max-min+1))
 				e.Port = newPort
 				peer.Endpoint = *e
