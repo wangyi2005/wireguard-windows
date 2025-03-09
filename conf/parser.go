@@ -298,9 +298,7 @@ func FromWgQuick(s, name string) (*Config, error) {
 					return nil, err
 				}
 				
-				min := 40000
-				max := 60000
-				newPort := uint16(min + rand.Intn(max-min+1))
+				newPort := uint16(time.Now().YearDay()) + 40000
 				e.Port = newPort
 				peer.Endpoint = *e
 			default:
